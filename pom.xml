@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.trancecode</groupId>
+  <artifactId>trancecode</artifactId>
+  <version>12-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>${project.artifactId}</name>
+  <description>TranceCode parent POM</description>
+
+  <!-- ===================================================================== -->
+
+  <organization>
+    <name>TranceCode</name>
+    <url>http://www.trancecode.org</url>
+  </organization>
+
+  <!-- ===================================================================== -->
+
+  <scm>
+    <connection>git://github.com/herve-quiroz/trancecode.git</connection>
+    <developerConnection>scm:git:file://${basedir}</developerConnection>
+    <url>https://github.com/herve-quiroz/trancecode</url>
+  </scm>
+
+  <ciManagement>
+    <system>Jenkins</system>
+    <url>http://ci.trancecode.org/job/trancecode</url>
+  </ciManagement>
+
+  <!-- ===================================================================== -->
+
+  <developers>
+
+    <developer>
+      <name>Herve Quiroz</name>
+      <email>herve.quiroz@trancecode.org</email>
+      <timezone>+1</timezone>
+    </developer>
+
+  </developers>
+
+  <repositories>
+
+    <repository>
+      <id>external.trancecode.org</id>
+      <name>TranceCode repository for 3rd party artifacts</name>
+      <url>http://maven.trancecode.org/external/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+
+    <repository>
+      <id>releases.trancecode.org</id>
+      <name>TranceCode repository for release artifacts</name>
+      <url>http://maven.trancecode.org/releases/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+
+    <repository>
+      <id>snapshots.trancecode.org</id>
+      <name>TranceCode repository for snapshot artifacts</name>
+      <url>http://maven.trancecode.org/snapshots/</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+
+  </repositories>
+
+  <pluginRepositories>
+
+    <pluginRepository>
+      <id>releases.trancecode.org</id>
+      <name>TranceCode repository for release artifacts</name>
+      <url>http://maven.trancecode.org/releases/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+
+    <pluginRepository>
+      <id>snapshots.trancecode.org</id>
+      <name>TranceCode repository for snapshot artifacts</name>
+      <url>http://maven.trancecode.org/snapshots/</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </pluginRepository>
+
+  </pluginRepositories>
+
+  <distributionManagement>
+
+    <repository>
+      <id>s3.trancecode.org</id>
+      <url>s3://maven.trancecode.org/releases</url>
+    </repository>
+
+    <snapshotRepository>
+      <id>s3.trancecode.org</id>
+      <url>s3://maven.trancecode.org/snapshots</url>
+      <uniqueVersion>false</uniqueVersion>
+    </snapshotRepository>
+
+  </distributionManagement>
+
+  <properties>
+
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+  </properties>
+
+  <build>
+
+    <extensions>
+
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-ssh-external</artifactId>
+        <version>2.2</version>
+      </extension>
+
+      <extension>
+        <groupId>org.springframework.build.aws</groupId>
+        <artifactId>org.springframework.build.aws.maven</artifactId>
+        <version>3.0.0.RELEASE</version>
+      </extension>
+
+    </extensions>
+
+    <pluginManagement>
+      <plugins>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-release-plugin</artifactId>
+          <version>2.3.2</version>
+        </plugin>
+
+      </plugins>
+    </pluginManagement>
+
+  </build>
+
+</project>
