@@ -201,7 +201,6 @@
               <version>2.1</version>
               <configuration>
                 <compilerArguments>
-                  <Xlint:all />
                   <!-- FIXME <Werror /> -->
                 </compilerArguments>
                 <source>1.6</source>
