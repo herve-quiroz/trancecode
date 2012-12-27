@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
 
@@ -11,14 +12,10 @@
   <name>${project.artifactId}</name>
   <description>TranceCode parent POM</description>
 
-  <!-- ===================================================================== -->
-
   <organization>
     <name>TranceCode</name>
     <url>http://www.trancecode.org</url>
   </organization>
-
-  <!-- ===================================================================== -->
 
   <scm>
     <connection>git://github.com/herve-quiroz/trancecode.git</connection>
@@ -31,8 +28,6 @@
     <system>Jenkins</system>
     <url>http://ci.trancecode.org/job/trancecode</url>
   </ciManagement>
-
-  <!-- ===================================================================== -->
 
   <developers>
 
@@ -130,6 +125,12 @@
   <properties>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <test.vm.args />
+    <verify.skip>false</verify.skip>
+    <verify.checkstyle.skip>${verify.skip}</verify.checkstyle.skip>
+    <verify.dependency.skip>${verify.skip}</verify.dependency.skip>
+    <verify.findbugs.skip>${verify.skip}</verify.findbugs.skip>
+    <verify.pmd.skip>${verify.skip}</verify.pmd.skip>
 
   </properties>
 
@@ -156,13 +157,241 @@
 
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>2.7</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>2.4</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-release-plugin</artifactId>
-          <version>2.3.2</version>
+          <version>2.4</version>
+          <configuration>
+            <goals>deploy</goals>
+          </configuration>
         </plugin>
 
       </plugins>
     </pluginManagement>
 
   </build>
+
+  <profiles>
+
+    <profile>
+      <id>java-module</id>
+      <activation>
+        <file>
+          <exists>${basedir}/.maven.profile.java-module</exists>
+        </file>
+      </activation>
+      <build>
+
+        <pluginManagement>
+          <plugins>
+
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <version>2.1</version>
+              <configuration>
+                <compilerArguments>
+                  <Xlint:all />
+                  <!-- FIXME <Werror /> -->
+                </compilerArguments>
+                <source>1.6</source>
+                <target>1.6</target>
+                <showWarnings>true</showWarnings>
+                <showDeprecation>true</showDeprecation>
+              </configuration>
+            </plugin>
+
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-javadoc-plugin</artifactId>
+              <version>2.8</version>
+              <configuration>
+                <detectLinks>true</detectLinks>
+                <links>
+                  <link>http://java.sun.com/javase/6/docs/api/</link>
+                </links>
+                <source>1.6</source>
+                <failOnError>false</failOnError>
+              </configuration>
+            </plugin>
+
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-surefire-plugin</artifactId>
+              <version>2.12.4</version>
+              <configuration>
+                <argLine>-Xms128m -Xmx128m ${test.vm.args}</argLine>
+                <forkMode>once</forkMode>
+                <reportFormat>brief</reportFormat>
+                <systemProperties>
+                  <property>
+                    <name>project.build.directory</name>
+                    <value>${project.build.directory}</value>
+                  </property>
+                  <property>
+                    <name>test.quiet</name>
+                    <value>${test.quiet}</value>
+                  </property>
+                </systemProperties>
+                <testFailureIgnore>true</testFailureIgnore>
+                <workingDirectory>${project.build.directory}</workingDirectory>
+              </configuration>
+            </plugin>
+
+            <plugin>
+              <groupId>org.codehaus.mojo</groupId>
+              <artifactId>cobertura-maven-plugin</artifactId>
+              <version>2.5.2</version>
+              <configuration>
+                <formats>
+                  <format>html</format>
+                  <format>xml</format>
+                </formats>
+              </configuration>
+            </plugin>
+
+          </plugins>
+        </pluginManagement>
+
+        <plugins>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-checkstyle-plugin</artifactId>
+            <version>2.9.1</version>
+            <dependencies>
+              <dependency>
+                <groupId>org.trancecode</groupId>
+                <artifactId>trancecode-checkstyle-configuration</artifactId>
+                <version>1-SNAPSHOT</version>
+              </dependency>
+            </dependencies>
+            <executions>
+              <execution>
+                <phase>verify</phase>
+                <goals>
+                  <goal>checkstyle</goal>
+                </goals>
+                <configuration>
+                  <configLocation>org/trancecode/checkstyle.xml</configLocation>
+                  <failsOnError>true</failsOnError>
+                  <linkXRef>false</linkXRef>
+                  <skip>${verify.checkstyle.skip}</skip>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>2.6</version>
+            <executions>
+              <execution>
+                <phase>verify</phase>
+                <goals>
+                  <goal>analyze</goal>
+                </goals>
+                <configuration>
+                  <failOnWarning>true</failOnWarning>
+                  <skip>${verify.dependency.skip}</skip>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>test-jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-pmd-plugin</artifactId>
+            <version>2.7.1</version>
+            <configuration>
+              <targetJdk>1.6</targetJdk>
+              <skip>${verify.pmd.skip}</skip>
+            </configuration>
+            <executions>
+              <execution>
+                <phase>verify</phase>
+                <goals>
+                  <goal>cpd</goal>
+                  <goal>check</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>2.1.1</version>
+            <executions>
+              <execution>
+                <phase>verify</phase>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>findbugs-maven-plugin</artifactId>
+            <version>2.5.2</version>
+            <executions>
+              <execution>
+                <phase>verify</phase>
+                <goals>
+                  <goal>check</goal>
+                </goals>
+                <configuration>
+                  <skip>${verify.findbugs.skip}</skip>
+                  <xmlOutput>true</xmlOutput>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>javancss-maven-plugin</artifactId>
+            <version>2.0</version>
+            <executions>
+              <execution>
+                <phase>verify</phase>
+                <goals>
+                  <!-- TODO <goal>check</goal> -->
+                  <goal>report</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+
+        </plugins>
+      </build>
+    </profile>
+
+  </profiles>
 
 </project>
