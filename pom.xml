@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
 
@@ -412,7 +413,7 @@
             <executions>
               <execution>
                 <id>aggregate-javadoc</id>
-                <phase>compile</phase>
+                <phase>package</phase>
                 <goals>
                   <goal>aggregate</goal>
                 </goals>
@@ -434,29 +435,17 @@
             <version>1.7</version>
             <executions>
               <execution>
-                <id>setup-mime-types</id>
-                <phase>generate-resources</phase>
-                <goals>
-                  <goal>run</goal>
-                </goals>
-                <configuration>
-                  <skip>apidoc.deploy.skip</skip>
-                  <target>
-                    <property name="mime.types.path" value="/etc/mime.types" />
-                    <mkdir dir="${project.build.directory}/classes/" />
-                    <copy file="${mime.types.path}" todir="${project.build.directory}/classes/" verbose="true" />
-                  </target>
-                </configuration>
-              </execution>
-              <execution>
                 <id>prepare-deploy-javadoc</id>
-                <phase>compile</phase>
+                <phase>package</phase>
                 <goals>
                   <goal>run</goal>
                 </goals>
                 <configuration>
                   <skip>apidoc.deploy.skip</skip>
                   <target>
+                    <echo message="text/css&#x9;css&#xA;" file="${project.build.directory}/classes/mime.types" append="true"/>
+                    <echo message="text/html&#x9;html&#xA;" file="${project.build.directory}/classes/mime.types" append="true"/>
+                    <echo message="image/if&#x9;gif&#xA;" file="${project.build.directory}/classes/mime.types" append="true"/>
                     <delete dir="${s3.local.path}/javadoc/${project.version}" />
                     <mkdir dir="${s3.local.path}/javadoc/${project.version}" />
                     <copy todir="${s3.local.path}/javadoc/${project.version}">
