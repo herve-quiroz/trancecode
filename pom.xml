@@ -6,7 +6,7 @@
 
   <groupId>org.trancecode</groupId>
   <artifactId>trancecode</artifactId>
-  <version>16</version>
+  <version>17-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>${project.artifactId}</name>
   <description>TranceCode parent POM</description>
@@ -20,7 +20,7 @@
     <connection>git://github.com/herve-quiroz/trancecode.git</connection>
     <developerConnection>scm:git:file://${basedir}</developerConnection>
     <url>https://github.com/herve-quiroz/trancecode</url>
-    <tag>trancecode-16</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <ciManagement>
