@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
 
@@ -132,6 +133,7 @@
     <test.vm.args />
     <verify.skip>false</verify.skip>
     <verify.checkstyle.skip>${verify.skip}</verify.checkstyle.skip>
+    <verify.dependency.ignoreNonCompile>false</verify.dependency.ignoreNonCompile>
     <verify.dependency.skip>${verify.skip}</verify.dependency.skip>
     <verify.findbugs.skip>${verify.skip}</verify.findbugs.skip>
     <verify.pmd.skip>${verify.skip}</verify.pmd.skip>
@@ -321,6 +323,7 @@
                 </goals>
                 <configuration>
                   <failOnWarning>true</failOnWarning>
+                  <ignoreNonCompile>${verify.dependency.ignoreNonCompile}</ignoreNonCompile>
                   <skip>${verify.dependency.skip}</skip>
                 </configuration>
               </execution>
@@ -448,9 +451,12 @@
                 <configuration>
                   <skip>apidoc.deploy.skip</skip>
                   <target>
-                    <echo message="text/css&#x9;css&#xA;" file="${project.build.directory}/classes/mime.types" append="true" />
-                    <echo message="text/html&#x9;html&#xA;" file="${project.build.directory}/classes/mime.types" append="true" />
-                    <echo message="image/if&#x9;gif&#xA;" file="${project.build.directory}/classes/mime.types" append="true" />
+                    <echo message="text/css&#x9;css&#xA;" file="${project.build.directory}/classes/mime.types"
+                      append="true" />
+                    <echo message="text/html&#x9;html&#xA;" file="${project.build.directory}/classes/mime.types"
+                      append="true" />
+                    <echo message="image/if&#x9;gif&#xA;" file="${project.build.directory}/classes/mime.types"
+                      append="true" />
                     <delete dir="${s3.local.path}/javadoc/${project.version}" />
                     <mkdir dir="${s3.local.path}/javadoc/${project.version}" />
                     <copy todir="${s3.local.path}/javadoc/${project.version}">
