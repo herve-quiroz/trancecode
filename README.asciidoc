@@ -1,0 +1,13 @@
+= Trancecode Maven parent POM
+Meta-POM with support for advanced build configuration through profiles.
+
+// vim: set syntax=asciidoc:
+// vim: set spell:
+
+== TODO
+
+* Add JXR profile
+* Make Java version configurable
+** Javadoc source
+** Javadoc links
+** Compiler source and target
