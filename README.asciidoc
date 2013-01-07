@@ -11,6 +11,5 @@ Meta-POM with support for advanced build configuration through profiles.
 ** Javadoc source
 ** Javadoc links
 ** Compiler source and target
-* Add single-JAR profile: to build a self-sufficient JAR file
 * Add GitHub profile
 * Add README/Asciidoc profile
